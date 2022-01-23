@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
     try {
         res.status(200).send(productos)
     } catch (error) {
-        res.status(500).send('Ups! hubo un problema! Volve a intentarlo mas tarde.')
+        res.status(500).send({ mensaje: 'Hubo un problema! Volve a intentarlo mas tarde.' })
     }
     next()
 })
@@ -18,12 +18,12 @@ router.get('/:id', (req, res, next) => {
     try {
         const producto = productos.find(prod => prod.id == req.params.id)
         if (producto == undefined) {
-            res.status(401).send({ mensaje: `No existe el producto con el id ${req.params.id}` })
+            res.status(401).send({ error : 'producto no encontrado' })
         } else {
             res.status(200).send(producto)
         }
     } catch (error) {
-        res.status(500).send('Ups! hubo un problema! Volve a intentarlo mas tarde.')
+        res.status(500).send({ mensaje: 'Hubo un problema! Volve a intentarlo mas tarde.' })
     }
     next()
 })
@@ -52,7 +52,7 @@ router.put('/:id', (req, res, next) => {
     try {
         const productoIndex = productos.findIndex(prod => prod.id == req.params.id)
         if (productoIndex == -1) {
-            res.status(401).send({ mensaje: `No existe el producto con el id ${req.params.id}` })
+            res.status(401).send({ error : 'producto no encontrado' })
         } else {
             const { error } = ProductosSchema.validate(req.body)
             if (error) {
@@ -65,7 +65,7 @@ router.put('/:id', (req, res, next) => {
             }
         }
     } catch (error) {
-        res.status(500).send('Ups! hubo un problema! Volve a intentarlo mas tarde.')
+        res.status(500).send({ mensaje: 'Hubo un problema! Volve a intentarlo mas tarde.' })
     }
     next()
 })
@@ -75,13 +75,13 @@ router.delete('/:id', (req, res, next) => {
         const productoIndex = productos.findIndex(prod => prod.id == req.params.id)
         console.log(productoIndex)
         if (productoIndex == -1) {
-            res.status(401).send({ mensaje: `No existe el producto con el id ${req.params.id}` })
+            res.status(401).send({ error : 'producto no encontrado' })
         } else {
             let productoDel = productos.splice(productoIndex, 1)
             res.status(200).send(productoDel)
         }
     } catch (error) {
-        res.status(500).send('Ups! hubo un problema! Volve a intentarlo mas tarde.')
+        res.status(500).send({ mensaje: 'Hubo un problema! Volve a intentarlo mas tarde.' })
     }
     next()
 })
